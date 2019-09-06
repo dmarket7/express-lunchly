@@ -6,6 +6,20 @@
 
 <h1>Customers</h1>
 
+<form id="search" class="my-3" action="/search" method="POST">
+  <div class="form-row justify-content-center">
+    <div class="col-4">
+      <input type="text" name="firstname" class="form-control" placeholder="First name">
+    </div>
+    <div class="col-4">
+      <input type="text" name="lastname" class="form-control" placeholder="Last name">
+    </div>
+    <div class="col-2">
+      <button class="btn btn-primary" type="submit">Search</button>
+    </div>
+  </div>
+</form>
+
 <ul style="column-count: 4">
   {% for customer in customers %}
   <li><a href="/{{ customer.id }}/">{{ customer.fullName() }}</a></li>

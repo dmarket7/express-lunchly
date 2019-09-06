@@ -6,7 +6,13 @@ const Reservation = require("./reservation");
 /** Customer of the restaurant. */
 
 class Customer {
-  constructor({ id, firstName, lastName, phone, notes }) {
+  constructor({
+    id,
+    firstName,
+    lastName,
+    phone,
+    notes
+  }) {
     this.id = id;
     this.firstName = firstName;
     this.lastName = lastName;
@@ -52,6 +58,28 @@ class Customer {
 
     return new Customer(customer);
   }
+
+  // search for customers
+  static async findAll(firstName, lastName) {
+    const results = await db.query(
+      `SELECT id, 
+         first_name AS "firstName",  
+         last_name AS "lastName", 
+         phone, 
+         notes
+       FROM customers
+       WHERE first_Name LIKE $1 AND last_Name LIKE $2
+       ORDER BY last_name, first_name`, [firstName, lastName]);
+
+    if (results === undefined) {
+      const err = new Error(`No one by that name here!`);
+      err.status = 404;
+      throw err;
+    }
+    return results.rows.map(c => new Customer(c));
+  }
+
+
 
   /** return full name of customer in one string. */
   fullName() {
