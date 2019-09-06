@@ -61,16 +61,42 @@ class Customer {
 
   // search for customers
   static async findAll(firstName, lastName) {
-    const results = await db.query(
-      `SELECT id, 
-         first_name AS "firstName",  
-         last_name AS "lastName", 
-         phone, 
-         notes
-       FROM customers
-       WHERE first_Name LIKE $1 AND last_Name LIKE $2
-       ORDER BY last_name, first_name`, [firstName, lastName]);
-
+    let results;
+    if(!lastName){
+      results = await db.query(
+        `SELECT id, 
+           first_name AS "firstName",  
+           last_name AS "lastName", 
+           phone, 
+           notes
+         FROM customers
+         WHERE first_Name LIKE '%' || $1 || '%'
+         ORDER BY last_name, first_name`, [firstName]);
+      console.log('RAN #1');
+    } else if (!firstName) {
+      results = await db.query(
+        `SELECT id, 
+          first_name AS "firstName",  
+          last_name AS "lastName", 
+          phone, 
+          notes
+        FROM customers
+        WHERE last_Name LIKE '%' || $1 || '%'
+        ORDER BY last_name, first_name`, [lastName]);
+        console.log('RAN #2');
+    } else {
+      results = await db.query(
+        `SELECT id, 
+           first_name AS "firstName",  
+           last_name AS "lastName", 
+           phone, 
+           notes
+         FROM customers
+         WHERE first_Name LIKE '%' || $1 || '%' AND last_Name LIKE '%' || $2 || '%'
+         ORDER BY last_name, first_name`, [firstName, lastName]);
+        console.log('RAN #3');
+    }
+    
     if (results === undefined) {
       const err = new Error(`No one by that name here!`);
       err.status = 404;
