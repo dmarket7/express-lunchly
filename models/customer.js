@@ -70,7 +70,7 @@ class Customer {
            phone, 
            notes
          FROM customers
-         WHERE first_Name LIKE '%' || $1 || '%'
+         WHERE lower(first_Name) LIKE '%' || $1 || '%'
          ORDER BY last_name, first_name`, [firstName]);
     } else if (!firstName) {
       results = await db.query(
@@ -80,7 +80,7 @@ class Customer {
           phone, 
           notes
         FROM customers
-        WHERE last_Name LIKE '%' || $1 || '%'
+        WHERE lower(last_Name) LIKE '%' || $1 || '%'
         ORDER BY last_name, first_name`, [lastName]);
     } else {
       results = await db.query(
@@ -90,7 +90,7 @@ class Customer {
            phone, 
            notes
          FROM customers
-         WHERE first_Name LIKE '%' || $1 || '%' AND last_Name LIKE '%' || $2 || '%'
+         WHERE lower(first_Name) LIKE '%' || $1 || '%' AND lower(last_Name) LIKE '%' || $2 || '%'
          ORDER BY last_name, first_name`, [firstName, lastName]);
     }
     
