@@ -1,10 +1,10 @@
 {% extends 'base.html' %}
-{% block title %}{{ customer.firstName }} {{ customer.lastName }}{% endblock %}
+{% block title %}{{ customer.fullName() }}{% endblock %}
 
 {% block content %}
 
 
-<h1>{{ customer.firstName }} {{ customer.lastName }}</h1>
+<h1>{{ customer.fullName() }}</h1>
 
 <div class="row">
 
