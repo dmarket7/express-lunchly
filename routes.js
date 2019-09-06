@@ -49,7 +49,6 @@ router.post("/add/", async function(req, res, next) {
 router.get('/topcustomers', async function(req, res, next) {
   try {
     const topCustomers = await Customer.topCustomers();
-    console.log("Top Customers ------->", topCustomers)
     return res.render("customer_list.html", { topCustomers });
   } catch (err) {
     return next(err);

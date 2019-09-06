@@ -112,7 +112,6 @@ class Customer {
           ORDER BY top_customers DESC
           LIMIT 10`
     );
-    console.log("FROM Customer.js", results.rows);
     return results.rows.map(c => {
       let customer = new Customer(c);
       customer.reservations = c.top_customers;
