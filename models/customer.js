@@ -72,7 +72,6 @@ class Customer {
          FROM customers
          WHERE first_Name LIKE '%' || $1 || '%'
          ORDER BY last_name, first_name`, [firstName]);
-      console.log('RAN #1');
     } else if (!firstName) {
       results = await db.query(
         `SELECT id, 
@@ -83,7 +82,6 @@ class Customer {
         FROM customers
         WHERE last_Name LIKE '%' || $1 || '%'
         ORDER BY last_name, first_name`, [lastName]);
-        console.log('RAN #2');
     } else {
       results = await db.query(
         `SELECT id, 
@@ -94,7 +92,6 @@ class Customer {
          FROM customers
          WHERE first_Name LIKE '%' || $1 || '%' AND last_Name LIKE '%' || $2 || '%'
          ORDER BY last_name, first_name`, [firstName, lastName]);
-        console.log('RAN #3');
     }
     
     if (results === undefined) {
@@ -105,7 +102,23 @@ class Customer {
     return results.rows.map(c => new Customer(c));
   }
 
-
+  static async topCustomers() {
+    const results = await db.query(
+      `SELECT first_name AS "firstName", last_name AS "lastName", customers.id, phone, customers.notes, COUNT(reservations.id) as top_customers 
+          FROM customers
+          JOIN reservations
+          ON customers.id = reservations.customer_id
+          GROUP BY "firstName", "lastName", customers.id, phone, customers.notes
+          ORDER BY top_customers DESC
+          LIMIT 10`
+    );
+    console.log("FROM Customer.js", results.rows);
+    return results.rows.map(c => {
+      let customer = new Customer(c);
+      customer.reservations = c.top_customers;
+      return customer;
+    });
+  }
 
   /** return full name of customer in one string. */
   fullName() {

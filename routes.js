@@ -36,16 +36,25 @@ router.post("/add/", async function(req, res, next) {
     const lastName = req.body.lastName;
     const phone = req.body.phone;
     const notes = req.body.notes;
-
+    
     const customer = new Customer({ firstName, lastName, phone, notes });
     await customer.save();
-
+    
     return res.redirect(`/${customer.id}/`);
   } catch (err) {
     return next(err);
   }
 });
-
+/** Show top customers list */
+router.get('/topcustomers', async function(req, res, next) {
+  try {
+    const topCustomers = await Customer.topCustomers();
+    console.log("Top Customers ------->", topCustomers)
+    return res.render("customer_list.html", { topCustomers });
+  } catch (err) {
+    return next(err);
+  }
+});
 /** Show a customer, given their ID. */
 
 router.get("/:id/", async function(req, res, next) {

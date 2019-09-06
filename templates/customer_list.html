@@ -26,4 +26,13 @@
   {% endfor %}
 </ul>
 
+<ol>
+  {% if topCustomers %}
+  <h1>Top Customers</h1>
+    {% for customer in topCustomers %}
+    <li><a href="/{{ customer.id }}/">{{ customer.fullName() }} ({{ customer.reservations }})</a></li>
+    {% endfor %}
+  {% endif %}
+</ol>
+
 {% endblock %}
