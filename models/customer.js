@@ -62,6 +62,8 @@ class Customer {
   // search for customers
   static async findAll(firstName, lastName) {
     let results;
+    //base query
+    // param with ['% ${lastname} %']
     if(!lastName){
       results = await db.query(
         `SELECT id, 
